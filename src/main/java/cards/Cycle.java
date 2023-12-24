@@ -45,6 +45,14 @@ public final class Cycle implements AutoCloseable {
           .map(PlayedCard::card)
           .toList());
     }
+
+    public Team getTeam() {
+      return team;
+    }
+
+    public List<Card> getCards() {
+      return cards;
+    }
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
