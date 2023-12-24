@@ -16,10 +16,9 @@ public final class Cycle implements AutoCloseable {
         return 1;
       if (card.getCardType() != dominantCardType && playedCard.card().getCardType() == dominantCardType)
         return -1;
-
       return Integer.compare(
-          numberDominanceOrder.indexOf(this.card.getNumber()),
-          numberDominanceOrder.indexOf(playedCard.card().getNumber()));
+          numberDominanceOrder.indexOf(playedCard.card().getNumber()),
+          numberDominanceOrder.indexOf(this.card.getNumber()));
     }
   }
   private final Scanner scanner;
