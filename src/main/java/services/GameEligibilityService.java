@@ -4,7 +4,9 @@ import cards.Card;
 import game.Game;
 import players.Player;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,8 @@ final class GameEligibilityServiceImpl implements GameEligibilityService {
         .map(Player::cards)
         .map(Set::stream)
         .map(cards -> cards.collect(Collectors.groupingBy(Card::getCardType, Collectors.counting())))
-        .flatMap(cardMap -> cardMap.values().stream())
+        .map(Map::values)
+        .flatMap(Collection::stream)
         .allMatch(freq -> freq <= 6);
   }
 }
