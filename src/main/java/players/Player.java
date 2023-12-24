@@ -10,9 +10,8 @@ public record Player(Team team, String name, Set<Card> cards, GameRulesService g
   public Card play(int number, CardType cardType, CardType dominantCardType) {
     var playedCard = Card.of(number, cardType);
 
-    if (!gameRulesService.isLegalPlay(this, playedCard, dominantCardType))
+    if (!gameRulesService.isLegalPlay(this, playedCard, dominantCardType) && !cards.remove(playedCard))
       throw new IllegalArgumentException();
-    cards.remove(playedCard);
     return playedCard;
   }
 }

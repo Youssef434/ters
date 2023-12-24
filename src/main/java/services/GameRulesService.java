@@ -7,14 +7,9 @@ import players.Player;
 
 public interface GameRulesService {
   default boolean isLegalPlay(Player player, Card card, CardType dominantCardType) {
-    if (dominantCardType == null)
-      return doesPlayerHaveCard(player, card);
-    var cardType = card.getCardType();
-    return ;
-  }
-
-  private boolean doesPlayerHaveCard(Player player, Card card) {
-    return player.cards().stream().anyMatch(c -> c.equals(card));
+    if (dominantCardType == null || card.getCardType() == dominantCardType)
+      return true;
+    return playerDoesntHaveDominantTypeCard(player, dominantCardType);
   }
   private boolean playerDoesntHaveDominantTypeCard(Player player, CardType dominantCardType) {
     return player.cards()
