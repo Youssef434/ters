@@ -44,6 +44,14 @@ public final class Cycle implements AutoCloseable {
     public List<Card> getCards() {
       return cards;
     }
+
+    @Override
+    public String toString() {
+      return new StringJoiner(", ", CycleResult.class.getSimpleName() + "[", "]")
+          .add("team=" + team)
+          .add("cards=" + cards)
+          .toString();
+    }
   }
   private final Scanner scanner;
   private final GameRulesService gameRulesService;
