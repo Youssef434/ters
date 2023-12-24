@@ -23,7 +23,6 @@ public class Game {
             cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())).stream().collect(Collectors.toUnmodifiableSet())))
         .toList();
   }
-
   private Stream<Card> generateCards() {
     return IntStream.rangeClosed(1, 12)
         .unordered()
