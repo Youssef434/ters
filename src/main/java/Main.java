@@ -13,10 +13,8 @@ import java.util.stream.IntStream;
 
 public class Main {
   public static void main(String[] args) {
-    System.out.println(IntStream.iterate(3, i -> (i + 1) % 4)
-        .limit(4)
-        .boxed().toList());
-    Cycle cycle = new Cycle(new Scanner(System.in), GameRulesService.create());
+
+    Cycle cycle = new Cycle(GameRulesService.create());
     Game game = new Game();
     System.out.println(cycle.start(0, game.distribute(new String[] {"P1", "P2", "P3", "P4"})));
 //    var game = new Game();

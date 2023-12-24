@@ -2,15 +2,17 @@ package players;
 
 import cards.Card;
 import cards.CardType;
+import services.GameRulesService;
 
 import java.util.Set;
 
-public record Player(Team team, String name, Set<Card> cards) {
-  public void play(int number, CardType cardType) {
+public record Player(Team team, String name, Set<Card> cards, GameRulesService gameRulesService) {
+  public Card play(int number, CardType cardType, CardType dominantCardType) {
     var playedCard = Card.of(number, cardType);
 
-    if (!cards.contains(playedCard))
-      throw new IllegalArgumentException("You can't play a card that you don't have in your hand");
+    if (!gameRulesService.isLegalPlay(this, playedCard, dominantCardType))
+      throw new IllegalArgumentException();
     cards.remove(playedCard);
+    return playedCard;
   }
 }

@@ -7,7 +7,7 @@ import services.GameRulesService;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public final class Cycle implements AutoCloseable {
+public final class Cycle {
   private record PlayedCard(Player player, Card card, CardType dominantCardType) implements Comparable<PlayedCard> {
     private static final List<Integer> numberDominanceOrder = List.of(3, 2, 1, 12, 11, 10, 4, 5, 6, 7);
     @Override
@@ -46,12 +46,8 @@ public final class Cycle implements AutoCloseable {
     }
   }
 
-  private final Scanner scanner;
-  private final GameRulesService gameRulesService;
 
-  public Cycle(Scanner scanner, GameRulesService gameRulesService) {
-    this.scanner = scanner;
-    this.gameRulesService = gameRulesService;
+  public Cycle() {
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
@@ -75,31 +71,23 @@ public final class Cycle implements AutoCloseable {
   private List<Player> orderPlayers(int beginIndex, List<Player> players) {
     return IntStream
         .iterate(beginIndex, i -> (i + 1) % 4)
-        .skip(1)
         .limit(4)
         .mapToObj(players::get)
         .toList();
   }
 
   private Card createCardFromUserInput(Player player, CardType dominantCardType) {
-    try {
+    try (Scanner scanner = new Scanner(System.in)) {
       System.out.println(player.name() + " turn.");
       System.out.println("Your hand : " + player.cards());
       System.out.print("provide the card's number : ");
       int cardNumber = scanner.nextInt();
       System.out.print("provide the card's type : ");
       CardType cardType = Enum.valueOf(CardType.class, scanner.next());
-      if (gameRulesService.isLegalPlay(player, cardType, dominantCardType))
-        return Card.of(cardNumber, cardType);
-      throw new IllegalArgumentException();
+      return player.play(cardNumber, cardType, dominantCardType);
     } catch (Exception unused) {
       System.out.println("The card you want to play is either invalid or you are not allowed to play it.");
       return null;
     }
-  }
-
-  @Override
-  public void close() {
-    scanner.close();
   }
 }
