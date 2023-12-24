@@ -1,5 +1,7 @@
 package cards;
 
+import java.util.StringJoiner;
+
 public final class Card {
   private final int number;
   private final CardType cardType;
@@ -21,6 +23,14 @@ public final class Card {
 
   public CardType getCardType() {
     return cardType;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Card.class.getSimpleName() + "[", "]")
+        .add("number=" + number)
+        .add("cardType=" + cardType)
+        .toString();
   }
 
   @Override
