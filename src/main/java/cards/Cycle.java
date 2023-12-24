@@ -21,14 +21,6 @@ public final class Cycle implements AutoCloseable {
           numberDominanceOrder.indexOf(this.card.getNumber()));
     }
   }
-  private final Scanner scanner;
-  private final GameRulesService gameRulesService;
-
-  public Cycle(Scanner scanner, GameRulesService gameRulesService) {
-    this.scanner = scanner;
-    this.gameRulesService = gameRulesService;
-  }
-
   public static class CycleResult {
     private final Team team;
     private final List<Card> cards;
@@ -54,23 +46,32 @@ public final class Cycle implements AutoCloseable {
     }
   }
 
+  private final Scanner scanner;
+  private final GameRulesService gameRulesService;
+
+  public Cycle(Scanner scanner, GameRulesService gameRulesService) {
+    this.scanner = scanner;
+    this.gameRulesService = gameRulesService;
+  }
+
   public CycleResult start(int beginIndex, List<Player> players) {
     var orderedPlayers = orderPlayers(beginIndex, players);
     SortedSet<PlayedCard> playedCards = new TreeSet<>();
     CardType dominantCardType = null;
 
     for (var player : orderedPlayers) {
-      int cardNumber = scanner.nextInt();
-      CardType cardType = Enum.valueOf(CardType.class, scanner.next());
+      System.out.println(player.name() + " turn.");
+      Card createdCard;
 
-      if (player == orderedPlayers.get(0))
-        dominantCardType = cardType;
-      while (!gameRulesService.isLegalPlay(player, cardType, dominantCardType) ||
-          !gameRulesService.isValidPlayedCard(player, cardNumber, cardType)) {
-        cardNumber = scanner.nextInt();
-        cardType = Enum.valueOf(CardType.class, scanner.next());
-      }
-      playedCards.add(new PlayedCard(player, Card.of(cardNumber, cardType), dominantCardType));
+      do {
+        createdCard = createCardFromUserInput();
+        if (createdCard == null)
+          continue;
+        if (player == orderedPlayers.get(0))
+          dominantCardType = createdCard.getCardType();
+      } while (createdCard == null || !gameRulesService.isLegalPlay(player, createdCard.getCardType(), dominantCardType));
+
+      playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
     }
     return CycleResult.of(playedCards);
   }
@@ -82,6 +83,18 @@ public final class Cycle implements AutoCloseable {
         .limit(4)
         .mapToObj(players::get)
         .toList();
+  }
+
+  private Card createCardFromUserInput() {
+    System.out.print("provide the card's number : ");
+    int cardNumber = scanner.nextInt();
+    System.out.print("provide the card's type : ");
+    CardType cardType = Enum.valueOf(CardType.class, scanner.next());
+    try {
+      return Card.of(cardNumber, cardType);
+    } catch (Exception unused) {
+      return null;
+    }
   }
 
   @Override
