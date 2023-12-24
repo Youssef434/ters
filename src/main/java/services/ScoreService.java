@@ -5,6 +5,7 @@ import players.Player;
 
 import java.util.Map;
 
+@FunctionalInterface
 public interface ScoreService {
   double countScore(Player player);
 
@@ -18,12 +19,12 @@ class ScoreServiceImpl implements ScoreService {
 
   public ScoreServiceImpl() {
     scoreMap = Map.of(
-        3, .33,
-        2, .33,
+        3, .34,
+        2, .34,
         1, 1d,
-        12, .33,
-        11, .33,
-        10, .33);
+        12, .34,
+        11, .34,
+        10, .34);
   }
 
   @Override
