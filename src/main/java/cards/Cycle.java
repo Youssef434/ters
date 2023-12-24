@@ -60,17 +60,13 @@ public final class Cycle implements AutoCloseable {
     CardType dominantCardType = null;
 
     for (var player : orderedPlayers) {
-      System.out.println(player.name() + " turn.");
       Card createdCard;
 
       do {
-        createdCard = createCardFromUserInput();
-        if (createdCard == null)
-          continue;
-        if (player == orderedPlayers.get(0))
+        createdCard = createCardFromUserInput(player, dominantCardType);
+        if (createdCard != null && player == orderedPlayers.get(0))
           dominantCardType = createdCard.getCardType();
-      } while (createdCard == null || !gameRulesService.isLegalPlay(player, createdCard.getCardType(), dominantCardType));
-
+      } while (createdCard == null);
       playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
     }
     return CycleResult.of(playedCards);
@@ -85,14 +81,18 @@ public final class Cycle implements AutoCloseable {
         .toList();
   }
 
-  private Card createCardFromUserInput() {
-    System.out.print("provide the card's number : ");
-    int cardNumber = scanner.nextInt();
-    System.out.print("provide the card's type : ");
-    CardType cardType = Enum.valueOf(CardType.class, scanner.next());
+  private Card createCardFromUserInput(Player player, CardType dominantCardType) {
     try {
-      return Card.of(cardNumber, cardType);
-    } catch (Exception unused) {
+      System.out.println(player.name() + " turn.");
+      System.out.print("provide the card's number : ");
+      int cardNumber = scanner.nextInt();
+      System.out.print("provide the card's type : ");
+      CardType cardType = Enum.valueOf(CardType.class, scanner.next());
+      if (gameRulesService.isLegalPlay(player, cardType, dominantCardType))
+        return Card.of(cardNumber, cardType);
+      throw new IllegalArgumentException();
+    } catch (IllegalArgumentException unused) {
+      System.out.println("The card you want to play is either invalid or you are not allowed to play it.");
       return null;
     }
   }
