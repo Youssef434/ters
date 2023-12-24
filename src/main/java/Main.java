@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 public class Main {
   public static void main(String[] args) {
 
-    Cycle cycle = new Cycle();
+    Cycle cycle = new Cycle(new Scanner(System.in));
     Game game = new Game();
     System.out.println(cycle.start(0, game.distribute(new String[] {"P1", "P2", "P3", "P4"})));
 //    var game = new Game();

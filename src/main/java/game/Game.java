@@ -19,8 +19,7 @@ public class Game {
         .mapToObj(i -> new Player(
             currentTeam(i),
             names[i],
-            cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())).stream().collect(Collectors.toUnmodifiableSet()),
-            gameRulesService))
+            new HashSet<>(cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())))))
         .toList();
   }
   private Stream<Card> generateCards() {

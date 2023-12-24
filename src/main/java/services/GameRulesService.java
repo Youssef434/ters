@@ -4,17 +4,19 @@ import cards.Card;
 import cards.CardType;
 import players.Player;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 public interface GameRulesService {
-  default boolean isLegalPlay(Player player, Card card, CardType dominantCardType) {
-    if (dominantCardType == null || card.getCardType() == dominantCardType)
-      return true;
-    return playerDoesntHaveDominantTypeCard(player, dominantCardType);
-  }
-  private boolean playerDoesntHaveDominantTypeCard(Player player, CardType dominantCardType) {
-    return player.cards()
+  default Set<Card> playableCards(Player player, CardType dominantCardType) {
+    if (dominantCardType == null)
+      return player.cards();
+    var dominantTypeCards = player.cards()
         .stream()
-        .noneMatch(c -> c.getCardType() == dominantCardType);
+        .filter(c -> c.getCardType() == dominantCardType)
+        .collect(Collectors.toSet());
+    return dominantTypeCards.isEmpty() ? player.cards() : dominantTypeCards;
   }
 
   static GameRulesService create() {

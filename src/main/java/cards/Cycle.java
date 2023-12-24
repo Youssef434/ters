@@ -2,12 +2,11 @@ package cards;
 
 import players.Player;
 import players.Team;
-import services.GameRulesService;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-public final class Cycle {
+public final class Cycle implements AutoCloseable {
   private record PlayedCard(Player player, Card card, CardType dominantCardType) implements Comparable<PlayedCard> {
     private static final List<Integer> numberDominanceOrder = List.of(3, 2, 1, 12, 11, 10, 4, 5, 6, 7);
     @Override
@@ -45,9 +44,11 @@ public final class Cycle {
       return cards;
     }
   }
+  private final Scanner scanner;
 
 
-  public Cycle() {
+  public Cycle(Scanner scanner) {
+    this.scanner = scanner;
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
@@ -56,13 +57,9 @@ public final class Cycle {
     CardType dominantCardType = null;
 
     for (var player : orderedPlayers) {
-      Card createdCard;
-
-      do {
-        createdCard = createCardFromUserInput(player, dominantCardType);
-        if (createdCard != null && player == orderedPlayers.get(0))
-          dominantCardType = createdCard.getCardType();
-      } while (createdCard == null);
+      var createdCard = createCardFromUserInput(player);
+      if (dominantCardType == null)
+        dominantCardType = createdCard.getCardType();
       playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
     }
     return CycleResult.of(playedCards);
@@ -76,18 +73,17 @@ public final class Cycle {
         .toList();
   }
 
-  private Card createCardFromUserInput(Player player, CardType dominantCardType) {
-    try (Scanner scanner = new Scanner(System.in)) {
-      System.out.println(player.name() + " turn.");
-      System.out.println("Your hand : " + player.cards());
-      System.out.print("provide the card's number : ");
-      int cardNumber = scanner.nextInt();
-      System.out.print("provide the card's type : ");
-      CardType cardType = Enum.valueOf(CardType.class, scanner.next());
-      return player.play(cardNumber, cardType, dominantCardType);
-    } catch (Exception unused) {
-      System.out.println("The card you want to play is either invalid or you are not allowed to play it.");
-      return null;
-    }
+  private Card createCardFromUserInput(Player player) {
+    System.out.println(player.name() + " turn.");
+    System.out.println("Your playable cards : " + player.cards());
+    System.out.print("provide the card's number : ");
+    int cardNumber = scanner.nextInt();
+    System.out.print("provide the card's type : ");
+    var cardType = Enum.valueOf(CardType.class, scanner.next());
+    return player.play(cardNumber, cardType);
+  }
+  @Override
+  public void close() {
+    scanner.close();
   }
 }
