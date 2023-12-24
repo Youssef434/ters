@@ -10,13 +10,15 @@ import java.util.stream.Stream;
 
 public class Game {
   public static void main(String[] args) {
-    System.out.println(new Game().distribute());
+    System.out.println(new Game().distribute().size());
   }
+
   public List<Player> distribute() {
     var cards = shuffleCards(generateCards()).toList();
     return IntStream.range(0, 4)
-        .mapToObj(i -> cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())))
-        .flatMap(e -> Arrays.stream(Team.values()).map(t -> new Player(t, e.stream().collect(Collectors.toUnmodifiableSet()))))
+        .mapToObj(i -> new Player(
+            currentTeam(i),
+            cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())).stream().collect(Collectors.toUnmodifiableSet())))
         .toList();
   }
 
@@ -33,5 +35,8 @@ public class Game {
     var shuffledCards = cards.collect(Collectors.toList());
     Collections.shuffle(shuffledCards);
     return shuffledCards.stream();
+  }
+  private Team currentTeam(int index) {
+    return index % 2 == 0 ? Team.A : Team.B;
   }
 }
