@@ -48,7 +48,7 @@ public final class Cycle implements AutoCloseable {
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
-    var orderedPlayers = orderPlayers(beginIndex, 4, players);
+    var orderedPlayers = orderPlayers(beginIndex, players);
     SortedSet<PlayedCard> playedCards = new TreeSet<>();
     CardType dominantCardType = null;
 
@@ -68,11 +68,11 @@ public final class Cycle implements AutoCloseable {
     return CycleResult.of(playedCards);
   }
 
-  private List<Player> orderPlayers(int beginIndex, int numberOfPlayers, List<Player> players) {
+  private List<Player> orderPlayers(int beginIndex, List<Player> players) {
     return IntStream
-        .iterate(beginIndex, i -> (i + 1) % numberOfPlayers)
+        .iterate(beginIndex, i -> (i + 1) % 4)
         .skip(1)
-        .limit(numberOfPlayers)
+        .limit(4)
         .mapToObj(players::get)
         .toList();
   }
