@@ -1,3 +1,5 @@
+package game;
+
 import cards.Card;
 import cards.CardType;
 import players.Player;
@@ -39,4 +41,5 @@ public class Game {
   private Team currentTeam(int index) {
     return index % 2 == 0 ? Team.A : Team.B;
   }
+
 }
