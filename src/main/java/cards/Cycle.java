@@ -84,6 +84,7 @@ public final class Cycle implements AutoCloseable {
   private Card createCardFromUserInput(Player player, CardType dominantCardType) {
     try {
       System.out.println(player.name() + " turn.");
+      System.out.println("Your hand : " + player.cards());
       System.out.print("provide the card's number : ");
       int cardNumber = scanner.nextInt();
       System.out.print("provide the card's type : ");
@@ -91,7 +92,7 @@ public final class Cycle implements AutoCloseable {
       if (gameRulesService.isLegalPlay(player, cardType, dominantCardType))
         return Card.of(cardNumber, cardType);
       throw new IllegalArgumentException();
-    } catch (IllegalArgumentException unused) {
+    } catch (Exception unused) {
       System.out.println("The card you want to play is either invalid or you are not allowed to play it.");
       return null;
     }
