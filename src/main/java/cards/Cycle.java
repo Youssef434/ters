@@ -2,6 +2,7 @@ package cards;
 
 import players.Player;
 import players.Team;
+import services.GameRulesService;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -45,10 +46,12 @@ public final class Cycle implements AutoCloseable {
     }
   }
   private final Scanner scanner;
+  private final GameRulesService gameRulesService;
 
 
-  public Cycle(Scanner scanner) {
+  public Cycle(Scanner scanner, GameRulesService gameRulesService) {
     this.scanner = scanner;
+    this.gameRulesService = gameRulesService;
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
@@ -57,7 +60,7 @@ public final class Cycle implements AutoCloseable {
     CardType dominantCardType = null;
 
     for (var player : orderedPlayers) {
-      var createdCard = createCardFromUserInput(player);
+      var createdCard = createCardFromUserInput(player, dominantCardType);
       if (dominantCardType == null)
         dominantCardType = createdCard.getCardType();
       playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
@@ -73,9 +76,9 @@ public final class Cycle implements AutoCloseable {
         .toList();
   }
 
-  private Card createCardFromUserInput(Player player) {
+  private Card createCardFromUserInput(Player player, CardType dominantCardType) {
     System.out.println(player.name() + " turn.");
-    System.out.println("Your playable cards : " + player.cards());
+    System.out.println("Your playable cards : " + gameRulesService.playableCards(player, dominantCardType));
     System.out.print("provide the card's number : ");
     int cardNumber = scanner.nextInt();
     System.out.print("provide the card's type : ");
