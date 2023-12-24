@@ -34,6 +34,7 @@ final class GameEligibilityServiceImpl implements GameEligibilityService {
   }
   private boolean areCardTypesLegal(List<Player> players) {
     return players.stream()
+        .parallel()
         .map(Player::cards)
         .map(Set::stream)
         .map(cards -> cards.collect(Collectors.groupingBy(Card::getCardType, Collectors.counting())))
