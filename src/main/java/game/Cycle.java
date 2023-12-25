@@ -8,7 +8,7 @@ import services.GameRulesService;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public final class Cycle implements AutoCloseable {
+public final class Cycle {
   private record PlayedCard(Player player, Card card, CardType dominantCardType) implements Comparable<PlayedCard> {
     private static final List<Integer> numberDominanceOrder = List.of(3, 2, 1, 12, 11, 10, 4, 5, 6, 7);
     @Override
@@ -91,9 +91,5 @@ public final class Cycle implements AutoCloseable {
     System.out.print("provide the card's type : ");
     var cardType = Enum.valueOf(CardType.class, scanner.next());
     return player.play(cardNumber, cardType);
-  }
-  @Override
-  public void close() {
-    scanner.close();
   }
 }
