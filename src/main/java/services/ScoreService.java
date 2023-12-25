@@ -4,7 +4,6 @@ import cards.Card;
 import game.Cycle;
 import game.TeamScore;
 import players.Player;
-import players.Team;
 
 import java.util.Collection;
 import java.util.Map;
