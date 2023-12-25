@@ -1,5 +1,7 @@
-package cards;
+package game;
 
+import cards.Card;
+import cards.CardType;
 import players.Player;
 import players.Team;
 import services.GameRulesService;
@@ -12,32 +14,30 @@ public final class Cycle implements AutoCloseable {
     private static final List<Integer> numberDominanceOrder = List.of(3, 2, 1, 12, 11, 10, 4, 5, 6, 7);
     @Override
     public int compareTo(PlayedCard playedCard) {
-      if (card.getCardType() == dominantCardType && playedCard.card().getCardType() != dominantCardType)
-        return 1;
-      if (card.getCardType() != dominantCardType && playedCard.card().getCardType() == dominantCardType)
-        return -1;
-      return Integer.compare(numberDominanceOrder.indexOf(this.card.getNumber()),
+      if (playedCard.card().getCardType() != dominantCardType)
+        return Integer.MIN_VALUE;
+      return Integer.compare(numberDominanceOrder.indexOf(card().getNumber()),
           numberDominanceOrder.indexOf(playedCard.card().getNumber()));
     }
   }
   public static class CycleResult {
-    private final Team team;
+    private final Player player;
     private final List<Card> cards;
 
-    private CycleResult(Team team, List<Card> cards) {
-      this.team = team;
+    private CycleResult(Player player, List<Card> cards) {
+      this.player = player;
       this.cards = cards;
     }
 
     public static CycleResult of(SortedSet<PlayedCard> playedCards) {
-      var winingTeam = playedCards.first().player.team();
-      return new CycleResult(winingTeam, playedCards.stream()
+      var winingPlayer = playedCards.first().player;
+      return new CycleResult(winingPlayer, playedCards.stream()
           .map(PlayedCard::card)
           .toList());
     }
 
-    public Team getTeam() {
-      return team;
+    public Player getPlayer() {
+      return player;
     }
 
     public List<Card> getCards() {
@@ -47,7 +47,7 @@ public final class Cycle implements AutoCloseable {
     @Override
     public String toString() {
       return new StringJoiner(", ", CycleResult.class.getSimpleName() + "[", "]")
-          .add("team=" + team)
+          .add("player=" + player)
           .add("cards=" + cards)
           .toString();
     }
