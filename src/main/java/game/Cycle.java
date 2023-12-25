@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 public final class Cycle {
   private record PlayedCard(Player player, Card card, CardType dominantCardType) implements Comparable<PlayedCard> {
     private static final List<Integer> numberDominanceOrder = List.of(3, 2, 1, 12, 11, 10, 4, 5, 6, 7);
+
     @Override
     public int compareTo(PlayedCard playedCard) {
       if (playedCard.card().getCardType() != dominantCardType)
@@ -53,7 +54,6 @@ public final class Cycle {
   }
   private final Scanner scanner;
   private final GameRulesService gameRulesService;
-
 
   public Cycle(Scanner scanner, GameRulesService gameRulesService) {
     this.scanner = scanner;
