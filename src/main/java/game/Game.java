@@ -17,27 +17,38 @@ public class Game {
   public Game(ScoreService scoreService) {
     this.scoreService = scoreService;
   }
-  public List<TeamScore> startGame(String[] playersNames) {
-    return null;
-//    return IntStream.iterate(0, i -> (i + 1) % 4)
-//        .limit(4)
-//        .mapToObj(i -> startRound(playersNames, i))
-//        .map(cycleResults -> new Round(cycleResults, scoreService))
-//        .flatMap(Round::getScore)
-//        .collect(Collectors.groupingByConcurrent(TeamScore::team, Collectors.summingDouble(TeamScore::score)));
+  private static Map<Team, Double> merge(Map<Team, Double> first, Map<Team, Double> second) {
+    return Map.of(
+        Team.A, first.get(Team.A) + second.get(Team.A),
+        Team.B, first.get(Team.B) + second.get(Team.B));
   }
-  private List<Cycle.CycleResult> startRound(String[] playersNames, int beginIndex) {
+  public Map<Team, Double> startGame(String[] playersNames) {
+    Map<Team, Double> overallScore = Map.of(Team.A, 0d, Team.B, 0d);
+    int beginIndex = 0;
+    do {
+      System.out.println("Round " + (beginIndex + 1));
+      System.out.println("___________________________");
+      var currentRoundScore = startRound(playersNames, beginIndex).getScore();
+      overallScore = merge(overallScore, currentRoundScore);
+      if (currentRoundScore.containsValue(0d))
+        return overallScore;
+      beginIndex = (beginIndex + 1) % 4;
+    } while (overallScore.values().stream().noneMatch(v -> v >= 21));
+    return overallScore;
+  }
+  private Round startRound(String[] playersNames, int beginIndex) {
     List<Cycle.CycleResult> cycleResults = new ArrayList<>();
     var players = distribute(playersNames);
     var gameRulesService = GameRulesService.create();
     for (int i = 0; i < 10; i++) {
+      System.out.println("Cycle " + (i + 1));
       try (var cycle = new Cycle(new Scanner(System.in), gameRulesService)) {
         var cycleResult = cycle.start(beginIndex, players);
         cycleResults.add(cycleResult);
         beginIndex = players.indexOf(cycleResult.getPlayer());
       }
     }
-    return cycleResults;
+    return new Round(cycleResults, scoreService);
   }
   private List<Player> distribute(String[] names) {
     var cards = shuffleCards(generateCards()).toList();

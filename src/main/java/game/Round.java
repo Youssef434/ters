@@ -6,11 +6,11 @@ import services.ScoreService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public record Round(List<Cycle.CycleResult> cycleResults, ScoreService scoreService) {
-  public Stream<TeamScore> getScore() {
+  public Map<Team, Double> getScore() {
     return cycleResults.stream()
-        .map(scoreService::countCycleScore);
+        .map(scoreService::countCycleScore)
+        .collect(Collectors.groupingBy(TeamScore::team, Collectors.summingDouble(TeamScore::score)));
   }
 }

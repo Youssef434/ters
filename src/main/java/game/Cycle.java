@@ -3,7 +3,6 @@ package game;
 import cards.Card;
 import cards.CardType;
 import players.Player;
-import players.Team;
 import services.GameRulesService;
 
 import java.util.*;
@@ -15,7 +14,7 @@ public final class Cycle implements AutoCloseable {
     @Override
     public int compareTo(PlayedCard playedCard) {
       if (playedCard.card().getCardType() != dominantCardType)
-        return Integer.MIN_VALUE;
+        return Integer.MIN_VALUE + 1;
       return Integer.compare(numberDominanceOrder.indexOf(card().getNumber()),
           numberDominanceOrder.indexOf(playedCard.card().getNumber()));
     }
@@ -84,6 +83,7 @@ public final class Cycle implements AutoCloseable {
   }
 
   private Card createCardFromUserInput(Player player, CardType dominantCardType) {
+    System.out.println("__________________________________________");
     System.out.println(player.name() + " turn.");
     System.out.println("Your playable cards : " + gameRulesService.playableCards(player, dominantCardType));
     System.out.print("provide the card's number : ");
