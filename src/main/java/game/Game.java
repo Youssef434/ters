@@ -19,8 +19,8 @@ public final class Game {
     this.scoreService = scoreService;
   }
 
-  public Map<Team, Double> startGame(String[] playersNames) {
-    Map<Team, Double> overallScore = Map.of(Team.A, 0d, Team.B, 0d);
+  public Map<Team, Integer> startGame(String[] playersNames) {
+    Map<Team, Integer> overallScore = Map.of(Team.A, 0, Team.B, 0);
     int beginIndex = 0;
 
     try (var scanner = new Scanner(System.in)) {
@@ -82,9 +82,9 @@ public final class Game {
     return index % 2 == 0 ? Team.A : Team.B;
   }
 
-  private static Map<Team, Double> merge(Map<Team, Double> first, Map<Team, Double> second) {
+  private static Map<Team, Integer> merge(Map<Team, Integer> first, Map<Team, Double> second) {
     return Map.of(
-        Team.A, first.get(Team.A) + second.get(Team.A),
-        Team.B, first.get(Team.B) + second.get(Team.B));
+        Team.A, Math.min(11, (int) Math.ceil(first.get(Team.A) + second.get(Team.A))),
+        Team.B, Math.min(11, (int) Math.ceil(first.get(Team.B) + second.get(Team.B))));
   }
 }
