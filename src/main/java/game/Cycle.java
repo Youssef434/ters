@@ -70,6 +70,7 @@ public final class Cycle {
       if (dominantCardType == null)
         dominantCardType = createdCard.getCardType();
       playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
+      System.out.println("table : " + playedCards);
     }
     return CycleResult.of(playedCards);
   }
