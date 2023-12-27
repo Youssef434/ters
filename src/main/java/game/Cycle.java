@@ -70,7 +70,8 @@ public final class Cycle {
       if (dominantCardType == null)
         dominantCardType = createdCard.getCardType();
       playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
-      System.out.println("table : " + playedCards);
+      System.out.println("_______________________________________");
+      System.out.println("table : " + playedCards.stream().map(PlayedCard::card).toList());
     }
     return CycleResult.of(playedCards);
   }
