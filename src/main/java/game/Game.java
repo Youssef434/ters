@@ -27,6 +27,11 @@ public final class Game {
       do {
         System.out.println("Round " + (beginIndex + 1));
         var currentRoundScore = startRound(playersNames, beginIndex, scanner).getScore();
+        System.out.println("Round winner : " + currentRoundScore.entrySet()
+            .stream()
+            .max(Comparator.comparingDouble(Map.Entry::getValue))
+            .orElseThrow()
+            .getKey());
         overallScore = merge(overallScore, currentRoundScore);
 
         if (currentRoundScore.containsValue(0d))
@@ -41,6 +46,7 @@ public final class Game {
     List<Cycle.CycleResult> cycleResults = new ArrayList<>();
     var players = distribute(playersNames);
     var gameRulesService = GameRulesService.create();
+    Team lastCycleWinner = null;
 
     for (int i = 0; i < 10; i++) {
       System.out.println("___________________________");
@@ -49,8 +55,9 @@ public final class Game {
       var cycleResult = cycle.start(beginIndex, players);
       cycleResults.add(cycleResult);
       beginIndex = players.indexOf(cycleResult.getPlayer());System.out.println("Cycle winner : " + cycleResult.getPlayer());
+      lastCycleWinner = cycleResult.getPlayer().team();
     }
-    return new Round(cycleResults, scoreService);
+    return new Round(cycleResults, scoreService, lastCycleWinner);
   }
 
   private List<Player> distribute(String[] names) {
