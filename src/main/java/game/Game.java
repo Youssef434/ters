@@ -54,7 +54,8 @@ public final class Game {
       var cycle = new Cycle(scanner, gameRulesService);
       var cycleResult = cycle.start(beginIndex, players);
       cycleResults.add(cycleResult);
-      beginIndex = players.indexOf(cycleResult.getPlayer());System.out.println("Cycle winner : " + cycleResult.getPlayer());
+      beginIndex = players.indexOf(cycleResult.getPlayer());
+      System.out.println("Cycle winner : " + cycleResult.getPlayer());
       lastCycleWinner = cycleResult.getPlayer().team();
     }
     return new Round(cycleResults, scoreService, lastCycleWinner);

@@ -12,7 +12,7 @@ public record Round(List<Cycle.CycleResult> cycleResults, ScoreService scoreServ
     var scoreMap = cycleResults.stream()
         .map(scoreService::countCycleScore)
         .collect(Collectors.groupingBy(TeamScore::team, Collectors.summingDouble(TeamScore::score)));
-    scoreMap.compute(lastCycleWinner, (k, v) -> v + 1);
+    scoreMap.computeIfPresent(lastCycleWinner, (k, v) -> v + 1);
     return scoreMap;
   }
 }
