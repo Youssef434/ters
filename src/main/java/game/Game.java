@@ -48,6 +48,7 @@ public final class Game {
   private Round startRound(String[] playersNames, int beginIndex, Scanner scanner) {
     return startRound(0, distribute(playersNames), beginIndex, Stream.empty(), null, GameRulesService.create(), scanner);
   }
+
   private Round startRound(int currentCycle, List<Player> players, int beginIndex, Stream<Cycle.CycleResult> cycleResults, Team lastCycleWinner, GameRulesService gameRulesService, Scanner scanner) {
     if (currentCycle >= 10)
       return new Round(cycleResults.toList(), scoreService, lastCycleWinner);
