@@ -16,7 +16,7 @@ public interface ScoreService {
   final class ScoreServiceImpl implements ScoreService {
     private final Map<Integer, Double> scoreMap;
 
-    public ScoreServiceImpl() {
+    private ScoreServiceImpl() {
       scoreMap = Map.of(
           3, .34,
           2, .34,

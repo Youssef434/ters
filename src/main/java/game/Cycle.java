@@ -22,7 +22,7 @@ public final class Cycle {
           .compare(this, playedCard);
     }
   }
-  public static class CycleResult {
+  public static final class CycleResult {
     private final Player player;
     private final List<Card> cards;
 
@@ -57,7 +57,7 @@ public final class Cycle {
   private final Scanner scanner;
   private final GameRulesService gameRulesService;
 
-  public Cycle(Scanner scanner, GameRulesService gameRulesService) {
+  private Cycle(Scanner scanner, GameRulesService gameRulesService) {
     this.scanner = scanner;
     this.gameRulesService = gameRulesService;
   }
@@ -97,5 +97,9 @@ public final class Cycle {
     System.out.print("provide the card's type : ");
     var cardType = Enum.valueOf(CardType.class, scanner.next());
     return player.play(cardNumber, cardType);
+  }
+
+  public static Cycle of(Scanner scanner, GameRulesService gameRulesService) {
+    return new Cycle(scanner, gameRulesService);
   }
 }

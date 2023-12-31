@@ -19,7 +19,6 @@ public interface GameRulesService {
         .collect(Collectors.toCollection(LinkedHashSet::new));
     return dominantTypeCards.isEmpty() ? player.cards() : dominantTypeCards;
   }
-
   static GameRulesService create() {
     return new GameRulesService() {};
   }
