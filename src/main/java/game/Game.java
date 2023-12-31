@@ -46,22 +46,23 @@ public final class Game {
   }
 
   private Round startRound(String[] playersNames, int beginIndex, Scanner scanner) {
-    List<Cycle.CycleResult> cycleResults = new ArrayList<>();
-    var players = distribute(playersNames);
-    var gameRulesService = GameRulesService.create();
-    Team lastCycleWinner = null;
-
-    for (int i = 0; i < 10; i++) {
-      System.out.println("___________________________");
-      System.out.println("Cycle " + (i + 1));
-      var cycle = new Cycle(scanner, gameRulesService);
-      var cycleResult = cycle.start(beginIndex, players);
-      cycleResults.add(cycleResult);
-      beginIndex = players.indexOf(cycleResult.getPlayer());
-      System.out.println("Cycle winner : " + cycleResult.getPlayer());
-      lastCycleWinner = cycleResult.getPlayer().team();
-    }
-    return new Round(cycleResults, scoreService, lastCycleWinner);
+    return startRound(0, distribute(playersNames), beginIndex, Stream.empty(), null, GameRulesService.create(), scanner);
+  }
+  private Round startRound(int currentCycle, List<Player> players, int beginIndex, Stream<Cycle.CycleResult> cycleResults, Team lastCycleWinner, GameRulesService gameRulesService, Scanner scanner) {
+    if (currentCycle >= 10)
+      return new Round(cycleResults.toList(), scoreService, lastCycleWinner);
+    System.out.println("___________________________");
+    System.out.println("Cycle " + (currentCycle + 1));
+    var cycle = new Cycle(scanner, gameRulesService);
+    var cycleResult = cycle.start(beginIndex, players);
+    System.out.println("Cycle winner : " + cycleResult.getPlayer());
+    return startRound(currentCycle + 1,
+        players,
+        players.indexOf(cycleResult.getPlayer()),
+        Stream.concat(cycleResults, Stream.of(cycleResult)),
+        cycleResult.getPlayer().team(),
+        gameRulesService,
+        scanner);
   }
 
   private List<Player> distribute(String[] names) {
