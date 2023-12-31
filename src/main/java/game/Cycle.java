@@ -14,10 +14,10 @@ public final class Cycle {
 
     @Override
     public int compareTo(PlayedCard playedCard) {
-      if (playedCard.card().getCardType() != dominantCardType)
-        return Integer.MIN_VALUE + 1;
-      return Integer.compare(numberDominanceOrder.indexOf(card().getNumber()),
-          numberDominanceOrder.indexOf(playedCard.card().getNumber()));
+      return Comparator
+          .comparing((PlayedCard pc) -> pc.card().getCardType() != dominantCardType)
+          .thenComparing(pc -> numberDominanceOrder.indexOf(pc.card().getNumber()))
+          .compare(this, playedCard);
     }
   }
   public static class CycleResult {
