@@ -20,26 +20,29 @@ public final class Game {
   }
 
   public Map<Team, Integer> startGame(String[] playersNames) {
-    Map<Team, Integer> overallScore = Map.of(Team.A, 0, Team.B, 0);
-    int beginIndex = 0;
-
     try (var scanner = new Scanner(System.in)) {
-      do {
-        System.out.println("Round " + (beginIndex + 1));
-        var currentRoundScore = startRound(playersNames, beginIndex, scanner).getScore();
-        System.out.println("Round winner : " + currentRoundScore.entrySet()
-            .stream()
-            .max(Comparator.comparingDouble(Map.Entry::getValue))
-            .orElseThrow()
-            .getKey());
-        overallScore = merge(overallScore, currentRoundScore);
-
-        if (currentRoundScore.containsValue(0d))
-          return overallScore;
-        beginIndex = (beginIndex + 1) % 4;
-      } while (overallScore.values().stream().noneMatch(v -> v >= 21));
+      return startGame(playersNames, 0, Map.of(Team.A, 0, Team.B, 0), scanner);
     }
-    return overallScore;
+  }
+
+  private Map<Team, Integer> startGame(String[] playersNames, int beginIndex, Map<Team, Integer> accumulatedScore, Scanner scanner) {
+    if (accumulatedScore.values().stream().anyMatch(v -> v >= 21))
+      return accumulatedScore;
+
+    System.out.println("Round " + (beginIndex + 1));
+    var currentRoundScore = startRound(playersNames, beginIndex, scanner).getScore();
+    System.out.println("Round winner : " + currentRoundScore.entrySet()
+        .stream()
+        .max(Comparator.comparingDouble(Map.Entry::getValue))
+        .orElseThrow()
+        .getKey());
+
+    if (currentRoundScore.containsValue(0d)) {
+      int teamAScore = currentRoundScore.get(Team.A) != 0d ? 21 : 0;
+      int teamBScore = currentRoundScore.get(Team.B) != 0d ? 21 : 0;
+      return Map.of(Team.A, teamAScore, Team.B, teamBScore);
+    }
+    return startGame(playersNames, (beginIndex + 1) % 4, merge(accumulatedScore, currentRoundScore), scanner);
   }
 
   private Round startRound(String[] playersNames, int beginIndex, Scanner scanner) {
