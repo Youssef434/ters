@@ -57,13 +57,8 @@ public final class Game {
     var cycle = new Cycle(scanner, gameRulesService);
     var cycleResult = cycle.start(beginIndex, players);
     System.out.println("Cycle winner : " + cycleResult.getPlayer());
-    return startRound(currentCycle + 1,
-        players,
-        players.indexOf(cycleResult.getPlayer()),
-        Stream.concat(cycleResults, Stream.of(cycleResult)),
-        cycleResult.getPlayer().team(),
-        gameRulesService,
-        scanner);
+    return startRound(currentCycle + 1, players, players.indexOf(cycleResult.getPlayer()),
+        Stream.concat(cycleResults, Stream.of(cycleResult)), cycleResult.getPlayer().team(), gameRulesService, scanner);
   }
 
   private List<Player> distribute(String[] names) {
@@ -99,8 +94,7 @@ public final class Game {
   }
 
   private static Map<Team, Integer> merge(Map<Team, Integer> first, Map<Team, Double> second) {
-    return Map.of(
-        Team.A, Math.min(11, (int) Math.ceil(first.get(Team.A) + second.get(Team.A))),
+    return Map.of(Team.A, Math.min(11, (int) Math.ceil(first.get(Team.A) + second.get(Team.A))),
         Team.B, Math.min(11, (int) Math.ceil(first.get(Team.B) + second.get(Team.B))));
   }
 }
