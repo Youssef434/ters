@@ -6,7 +6,9 @@ import players.Player;
 import services.GameRulesService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static shared.CardsComparing.numberDominanceOrder;
 
@@ -61,19 +63,21 @@ public final class Cycle {
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
-    var orderedPlayers = orderPlayers(beginIndex, players);
-    SortedSet<PlayedCard> playedCards = new TreeSet<>();
-    CardType dominantCardType = null;
+    return start(orderPlayers(beginIndex, players), 0, null, new TreeSet<>());
+  }
 
-    for (var player : orderedPlayers) {
-      var createdCard = createCardFromUserInput(player, dominantCardType);
-      if (dominantCardType == null)
-        dominantCardType = createdCard.getCardType();
-      playedCards.add(new PlayedCard(player, createdCard, dominantCardType));
-      System.out.println("_______________________________________");
-      System.out.println("table : " + playedCards.stream().map(PlayedCard::card).toList());
-    }
-    return CycleResult.of(playedCards);
+  private CycleResult start(List<Player> players, int currentPlayerIndex, CardType dominantCardType, SortedSet<PlayedCard> playedCards) {
+    if (currentPlayerIndex >= players.size())
+      return CycleResult.of(playedCards);
+    var player = players.get(currentPlayerIndex);
+    var createdCard = createCardFromUserInput(player, dominantCardType);
+    var newDominantCardType = dominantCardType == null ? createdCard.getCardType() : dominantCardType;
+    var newPlayedCards = Stream.concat(playedCards.stream(),
+            Stream.of(new PlayedCard(player, createdCard, newDominantCardType)))
+        .collect(Collectors.toCollection(TreeSet::new));
+    System.out.println("_______________________________________");
+    System.out.println("table : " + newPlayedCards.stream().map(PlayedCard::card).toList());
+    return start(players, currentPlayerIndex + 1, newDominantCardType, newPlayedCards);
   }
 
   private List<Player> orderPlayers(int beginIndex, List<Player> players) {
