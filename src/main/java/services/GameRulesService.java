@@ -4,6 +4,7 @@ import cards.Card;
 import cards.CardType;
 import players.Player;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public interface GameRulesService {
     var dominantTypeCards = player.cards()
         .stream()
         .filter(c -> c.getCardType() == dominantCardType)
-        .collect(Collectors.toSet());
+        .collect(Collectors.toCollection(LinkedHashSet::new));
     return dominantTypeCards.isEmpty() ? player.cards() : dominantTypeCards;
   }
 

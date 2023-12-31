@@ -1,8 +1,12 @@
 package cards;
 
+
+import java.util.Comparator;
 import java.util.StringJoiner;
 
-public final class Card {
+import static shared.CardsComparing.numberDominanceOrder;
+
+public final class Card implements Comparable<Card> {
   private final int number;
   private final CardType cardType;
 
@@ -49,5 +53,13 @@ public final class Card {
     int result = number;
     result = 31 * result + cardType.hashCode();
     return result;
+  }
+
+  @Override
+  public int compareTo(Card c) {
+    return Comparator
+        .comparing(Card::getCardType)
+        .thenComparing(cc -> numberDominanceOrder.indexOf(cc.number))
+        .compare(this, c);
   }
 }

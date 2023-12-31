@@ -72,7 +72,10 @@ public final class Game {
         .mapToObj(i -> new Player(
             currentTeam(i),
             names[i],
-            new HashSet<>(cards.subList(i * 10, Math.min((i + 1) * 10, cards.size())))))
+            cards.subList(i * 10, Math.min((i + 1) * 10, cards.size()))
+                .stream()
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new))))
         .toList();
   }
 
