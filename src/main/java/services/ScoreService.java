@@ -3,20 +3,17 @@ package services;
 import cards.Card;
 import game.Cycle;
 import game.TeamScore;
-import players.Player;
-
 import java.util.Collection;
 import java.util.Map;
 
 public interface ScoreService {
-  double countScore(Player player);
   TeamScore countCycleScore(Cycle.CycleResult cycleResult);
 
   static ScoreService create() {
     return new ScoreServiceImpl();
   }
 
-  class ScoreServiceImpl implements ScoreService {
+  final class ScoreServiceImpl implements ScoreService {
     private final Map<Integer, Double> scoreMap;
 
     public ScoreServiceImpl() {
@@ -27,11 +24,6 @@ public interface ScoreService {
           12, .34,
           11, .34,
           10, .34);
-    }
-
-    @Override
-    public double countScore(Player player) {
-      return countScore(player.cards());
     }
 
     private double countScore(Collection<Card> cards) {
