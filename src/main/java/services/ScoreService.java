@@ -2,12 +2,16 @@ package services;
 
 import cards.Card;
 import game.Cycle;
+import game.Round;
 import game.TeamScore;
+import players.Team;
+
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public interface ScoreService {
-  TeamScore countCycleScore(Cycle.CycleResult cycleResult);
+  Map<Team, Double> getRoundScore(Round.RoundResult roundResult);
 
   static ScoreService create() {
     return new ScoreServiceImpl();
@@ -34,9 +38,18 @@ public interface ScoreService {
           .mapToDouble(scoreMap::get)
           .sum();
     }
-    @Override
-    public TeamScore countCycleScore(Cycle.CycleResult cycleResult) {
+
+    private TeamScore countCycleScore(Cycle.CycleResult cycleResult) {
       return new TeamScore(cycleResult.getPlayer().team(), countScore(cycleResult.getCards()));
+    }
+
+    @Override
+    public Map<Team, Double> getRoundScore(Round.RoundResult roundResult) {
+      var resultMap = roundResult.cycleResults().stream()
+          .map(this::countCycleScore)
+          .collect(Collectors.groupingBy(TeamScore::team, Collectors.summingDouble(TeamScore::score)));
+      resultMap.computeIfPresent(roundResult.lastCycleWinner(), (k, v) -> v + 1);
+      return resultMap;
     }
   }
 }

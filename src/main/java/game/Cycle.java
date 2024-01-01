@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static shared.CardsComparing.numberDominanceOrder;
 
-public final class Cycle {
+public final class Cycle implements Playable {
   private record PlayedCard(Player player, Card card, CardType dominantCardType) implements Comparable<PlayedCard> {
     @Override
     public int compareTo(PlayedCard playedCard) {
@@ -22,7 +22,7 @@ public final class Cycle {
           .compare(this, playedCard);
     }
   }
-  public static final class CycleResult {
+  public static final class CycleResult implements Result {
     private final Player player;
     private final List<Card> cards;
 

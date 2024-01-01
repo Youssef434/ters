@@ -8,7 +8,7 @@ import java.util.Map;
 public final class Main {
   public static void main(String[] args) {
     Game game = new Game(ScoreService.create(), CardsService.create());
-    var gameResult = game.startGame(new String[] {"P1", "P2", "P3", "P4"});
+    var gameResult = game.start(new String[] {"P1", "P2", "P3", "P4"});
     System.out.println("______________________________");
     System.out.println("Winner : " + gameResult.entrySet()
         .stream()
