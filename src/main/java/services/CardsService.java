@@ -26,7 +26,7 @@ public interface CardsService {
     public List<Player> distribute(String[] names) {
       var cards = shuffle(generate()).toList();
       return IntStream.range(0, 4)
-          .mapToObj(i -> new Player(
+          .mapToObj(i -> Player.of(
               currentTeam(i),
               names[i],
               cards.subList(i * 10, Math.min((i + 1) * 10, cards.size()))

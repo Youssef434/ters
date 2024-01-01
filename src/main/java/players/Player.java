@@ -20,4 +20,8 @@ public record Player(Team team, String name, Set<Card> cards) {
         .add("name='" + name + "'")
         .toString();
   }
+
+  public static Player of(Team team, String name, Set<Card> cards) {
+    return new Player(team, name, cards);
+  }
 }
