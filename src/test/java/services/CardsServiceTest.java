@@ -69,7 +69,22 @@ public class CardsServiceTest {
             Collectors.mapping(
                 player -> player.cards().size(),
                 Collectors.summingInt(i -> i))))
-        .values();
+        .values()
+        .stream()
+        .toList();
     Assertions.assertIterableEquals(List.of(20, 20), teamsCardsCount);
+  }
+
+  @Test
+  public void testEveryCardTypeHave10Cards() {
+    var cardTypesCardCount = players.stream()
+        .map(Player::cards)
+        .flatMap(Set::stream)
+        .collect(Collectors.groupingBy(
+            Card::getCardType,
+            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)))
+        .values()
+        .stream().toList();
+    Assertions.assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
   }
 }
