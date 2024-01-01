@@ -51,4 +51,12 @@ public class CardsServiceTest {
     Assertions.assertArrayEquals(new int[] {10, 10, 10, 10}, playersNumberOfCards);
   }
 
+  @Test
+  public void testNumberOfTeamsIsExactlyTwo() {
+    var teamsCount = players.stream()
+        .map(Player::team)
+        .distinct()
+        .count();
+    Assertions.assertEquals(2, teamsCount);
+  }
 }
