@@ -41,5 +41,14 @@ public class CardsServiceTest {
     Assertions.assertEquals(4, overallCardTypesCount);
   }
 
+  @Test
+  public void testNumberOfCardsInEachPlayerHandIs10() {
+    var playersNumberOfCards = players.stream()
+        .map(Player::cards)
+        .map(Set::size)
+        .mapToInt(c -> c)
+        .toArray();
+    Assertions.assertArrayEquals(new int[] {10, 10, 10, 10}, playersNumberOfCards);
+  }
 
 }
