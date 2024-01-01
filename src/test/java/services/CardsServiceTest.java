@@ -8,6 +8,7 @@ import players.Player;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CardsServiceTest {
   private static List<Player> players;
@@ -58,5 +59,17 @@ public class CardsServiceTest {
         .distinct()
         .count();
     Assertions.assertEquals(2, teamsCount);
+  }
+
+  @Test
+  public void testEveryTeamHasExactly20Cards() {
+    var teamsCardsCount = players.stream()
+        .collect(Collectors.groupingBy(
+            Player::team,
+            Collectors.mapping(
+                player -> player.cards().size(),
+                Collectors.summingInt(i -> i))))
+        .values();
+    Assertions.assertIterableEquals(List.of(20, 20), teamsCardsCount);
   }
 }
