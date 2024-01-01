@@ -30,16 +30,11 @@ public final class Game {
     var roundScore = round.start(beginIndex, cardsService.distribute(playersNames)).get();
     System.out.println("Round result : " + roundScore);
 
-    if (roundScore.containsValue(0d)) {
-      int teamAScore = roundScore.get(Team.A) != 0d ? 21 : 0;
-      int teamBScore = roundScore.get(Team.B) != 0d ? 21 : 0;
+    if (roundScore.containsValue(0)) {
+      int teamAScore = roundScore.get(Team.A) != 0 ? 21 : 0;
+      int teamBScore = roundScore.get(Team.B) != 0 ? 21 : 0;
       return Map.of(Team.A, teamAScore, Team.B, teamBScore);
     }
-    return start(playersNames, (beginIndex + 1) % 4, merge(accumulatedScore, roundScore), scanner);
-  }
-
-  private static Map<Team, Integer> merge(Map<Team, Integer> first, Map<Team, Double> second) {
-    return Map.of(Team.A, Math.min(11, (int) Math.ceil(first.get(Team.A) + second.get(Team.A))),
-        Team.B, Math.min(11, (int) Math.ceil(first.get(Team.B) + second.get(Team.B))));
+    return start(playersNames, (beginIndex + 1) % 4, scoreService.merge(accumulatedScore, roundScore), scanner);
   }
 }

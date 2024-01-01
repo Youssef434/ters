@@ -23,7 +23,7 @@ public final class Round implements Playable {
 
   public record RoundResult(List<Cycle.CycleResult> cycleResults, ScoreService scoreService, Team lastCycleWinner) implements Result {
     @Override
-    public Map<Team, Double> get() {
+    public Map<Team, Integer> get() {
       return scoreService.getRoundScore(this);
     }
 
