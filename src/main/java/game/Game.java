@@ -26,14 +26,9 @@ public final class Game {
     if (accumulatedScore.values().stream().anyMatch(v -> v >= 21))
       return accumulatedScore;
     System.out.println("Round " + (beginIndex + 1));
-    var round = new Round(GameRulesService.create(), scanner);
-    var roundScore = scoreService.getRoundScore(
-        round.start(beginIndex, cardsService.distribute(playersNames)));
-    System.out.println("Round winner : " + roundScore.entrySet()
-        .stream()
-        .max(Comparator.comparingDouble(Map.Entry::getValue))
-        .orElseThrow()
-        .getKey());
+    var round = new Round(GameRulesService.create(), scoreService, scanner);
+    var roundScore = round.start(beginIndex, cardsService.distribute(playersNames)).get();
+    System.out.println("Round winner : " + roundScore);
 
     if (roundScore.containsValue(0d)) {
       int teamAScore = roundScore.get(Team.A) != 0d ? 21 : 0;

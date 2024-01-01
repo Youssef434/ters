@@ -3,7 +3,9 @@ package game;
 import cards.Card;
 import cards.CardType;
 import players.Player;
+import players.Team;
 import services.GameRulesService;
+import services.ScoreService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,17 +27,19 @@ public final class Cycle implements Playable {
   public static final class CycleResult implements Result {
     private final Player player;
     private final List<Card> cards;
+    private final ScoreService scoreService;
 
-    private CycleResult(Player player, List<Card> cards) {
+    private CycleResult(Player player, List<Card> cards, ScoreService scoreService) {
       this.player = player;
       this.cards = cards;
+      this.scoreService = scoreService;
     }
 
-    public static CycleResult of(SortedSet<PlayedCard> playedCards) {
+    public static CycleResult of(SortedSet<PlayedCard> playedCards, ScoreService scoreService) {
       var winingPlayer = playedCards.first().player;
       return new CycleResult(winingPlayer, playedCards.stream()
           .map(PlayedCard::card)
-          .toList());
+          .toList(), scoreService);
     }
 
     public Player getPlayer() {
@@ -53,13 +57,20 @@ public final class Cycle implements Playable {
           .add("cards=" + cards)
           .toString();
     }
+
+    @Override
+    public Map<Team, Double> get() {
+      return scoreService.getCycleScore(this);
+    }
   }
   private final Scanner scanner;
   private final GameRulesService gameRulesService;
+  private final ScoreService scoreService;
 
-  private Cycle(Scanner scanner, GameRulesService gameRulesService) {
+  private Cycle(Scanner scanner, GameRulesService gameRulesService, ScoreService scoreService) {
     this.scanner = scanner;
     this.gameRulesService = gameRulesService;
+    this.scoreService = scoreService;
   }
 
   public CycleResult start(int beginIndex, List<Player> players) {
@@ -68,7 +79,7 @@ public final class Cycle implements Playable {
 
   private CycleResult start(List<Player> players, int currentPlayerIndex, CardType dominantCardType, SortedSet<PlayedCard> playedCards) {
     if (currentPlayerIndex >= players.size())
-      return CycleResult.of(playedCards);
+      return CycleResult.of(playedCards, scoreService);
     var player = players.get(currentPlayerIndex);
     var createdCard = createCardFromUserInput(player, dominantCardType);
     var newDominantCardType = dominantCardType == null ? createdCard.getCardType() : dominantCardType;
@@ -99,7 +110,7 @@ public final class Cycle implements Playable {
     return player.play(cardNumber, cardType);
   }
 
-  public static Cycle of(Scanner scanner, GameRulesService gameRulesService) {
-    return new Cycle(scanner, gameRulesService);
+  public static Cycle of(Scanner scanner, GameRulesService gameRulesService, ScoreService scoreService) {
+    return new Cycle(scanner, gameRulesService, scoreService);
   }
 }
