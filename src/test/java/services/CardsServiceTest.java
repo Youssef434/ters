@@ -9,18 +9,23 @@ import java.util.List;
 import java.util.Set;
 
 public class CardsServiceTest {
-  private static List<Player> distributedCards;
+  private static List<Player> players;
   @BeforeAll
   public static void init() {
-    distributedCards = CardsService.create().distribute(new String[] {"P1", "P2", "P3", "P4"});
+    players = CardsService.create().distribute(new String[] {"P1", "P2", "P3", "P4"});
   }
 
   @Test
   public void testIsDistributedCardsSizeEqualTo40() {
-    long overallNumberOfCards = distributedCards.stream()
+    long overallNumberOfCards = players.stream()
         .map(Player::cards)
         .mapToInt(Set::size)
         .sum();
     Assertions.assertEquals(40, overallNumberOfCards);
+  }
+
+  @Test
+  public void testNumberOfPlayersEqualTo4() {
+    Assertions.assertEquals(4, players.size());
   }
 }
