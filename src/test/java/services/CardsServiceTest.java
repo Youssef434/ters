@@ -9,6 +9,7 @@ import players.Player;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CardsServiceTest {
   private static List<Player> players;
@@ -86,5 +87,21 @@ public class CardsServiceTest {
         .values()
         .stream().toList();
     Assertions.assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
+  }
+
+  @Test
+  public void testEveryCardNumberPresent4Times() {
+    var cardsNumbersOccurrences = players.stream()
+        .map(Player::cards)
+        .flatMap(Set::stream)
+        .collect(Collectors.groupingBy(
+            Card::getNumber,
+            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)))
+        .values()
+        .stream().toList();
+    Assertions.assertEquals(
+        IntStream.rangeClosed(1, 10).map(i -> 4).boxed().toList(),
+        cardsNumbersOccurrences
+    );
   }
 }
