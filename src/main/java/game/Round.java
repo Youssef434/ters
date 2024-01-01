@@ -27,7 +27,7 @@ public final class Round implements Playable {
       return scoreService.getRoundScore(this);
     }
 
-    public static RoundResult of(List<Cycle.CycleResult> cycleResults, ScoreService scoreService, Team lastCycleWinner) {
+    public static RoundResult from(List<Cycle.CycleResult> cycleResults, ScoreService scoreService, Team lastCycleWinner) {
       return new RoundResult(cycleResults, scoreService, lastCycleWinner);
     }
   }
@@ -39,16 +39,16 @@ public final class Round implements Playable {
 
   private RoundResult start(int currentCycle, List<Player> players, int beginIndex, Stream<Cycle.CycleResult> cycleResults, Team lastCycleWinner) {
     if (currentCycle >= 10)
-      return RoundResult.of(cycleResults.toList(), scoreService, lastCycleWinner);
+      return RoundResult.from(cycleResults.toList(), scoreService, lastCycleWinner);
     System.out.println("___________________________");
     System.out.println("Cycle " + (currentCycle + 1));
-    var cycle = Cycle.of(scanner, gameRulesService, scoreService);
+    var cycle = Cycle.from(scanner, gameRulesService, scoreService);
     var cycleResult = cycle.start(beginIndex, players);
     return start(currentCycle + 1, players, players.indexOf(cycleResult.getPlayer()),
         Stream.concat(cycleResults, Stream.of(cycleResult)), cycleResult.getPlayer().team());
   }
 
-  public static Round of(GameRulesService gameRulesService, ScoreService scoreService, Scanner scanner) {
+  public static Round from(GameRulesService gameRulesService, ScoreService scoreService, Scanner scanner) {
     return new Round(gameRulesService, scoreService, scanner);
   }
 }

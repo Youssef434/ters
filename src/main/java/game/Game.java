@@ -26,7 +26,7 @@ public final class Game {
     if (accumulatedScore.values().stream().anyMatch(v -> v >= 21))
       return accumulatedScore;
     System.out.println("Round " + (beginIndex + 1));
-    var round = Round.of(GameRulesService.create(), scoreService, scanner);
+    var round = Round.from(GameRulesService.create(), scoreService, scanner);
     var roundScore = round.start(beginIndex, cardsService.distribute(playersNames)).get();
     System.out.println("Round result : " + roundScore);
 

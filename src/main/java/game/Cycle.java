@@ -35,7 +35,7 @@ public final class Cycle implements Playable {
       this.scoreService = scoreService;
     }
 
-    public static CycleResult of(SortedSet<PlayedCard> playedCards, ScoreService scoreService) {
+    public static CycleResult from(SortedSet<PlayedCard> playedCards, ScoreService scoreService) {
       var winingPlayer = playedCards.first().player;
       return new CycleResult(winingPlayer, playedCards.stream()
           .map(PlayedCard::card)
@@ -79,7 +79,7 @@ public final class Cycle implements Playable {
 
   private CycleResult start(List<Player> players, int currentPlayerIndex, CardType dominantCardType, SortedSet<PlayedCard> playedCards) {
     if (currentPlayerIndex >= players.size())
-      return CycleResult.of(playedCards, scoreService);
+      return CycleResult.from(playedCards, scoreService);
     var player = players.get(currentPlayerIndex);
     var createdCard = createCardFromUserInput(player, dominantCardType);
     var newDominantCardType = dominantCardType == null ? createdCard.getCardType() : dominantCardType;
@@ -110,7 +110,7 @@ public final class Cycle implements Playable {
     return player.play(cardNumber, cardType);
   }
 
-  public static Cycle of(Scanner scanner, GameRulesService gameRulesService, ScoreService scoreService) {
+  public static Cycle from(Scanner scanner, GameRulesService gameRulesService, ScoreService scoreService) {
     return new Cycle(scanner, gameRulesService, scoreService);
   }
 }
