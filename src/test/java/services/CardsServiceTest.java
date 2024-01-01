@@ -1,5 +1,6 @@
 package services;
 
+import cards.Card;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,4 +29,17 @@ public class CardsServiceTest {
   public void testNumberOfPlayersEqualTo4() {
     Assertions.assertEquals(4, players.size());
   }
+
+  @Test
+  public void testNumberOfCardTypesAre4() {
+    var overallCardTypesCount = players.stream()
+        .map(Player::cards)
+        .flatMap(Set::stream)
+        .map(Card::getCardType)
+        .distinct()
+        .count();
+    Assertions.assertEquals(4, overallCardTypesCount);
+  }
+
+
 }
