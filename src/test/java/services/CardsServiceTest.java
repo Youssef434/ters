@@ -100,8 +100,22 @@ public class CardsServiceTest {
         .values()
         .stream().toList();
     Assertions.assertEquals(
-        IntStream.rangeClosed(1, 10).map(i -> 4).boxed().toList(),
+        IntStream.rangeClosed(1, 10).map(unused -> 4).boxed().toList(),
         cardsNumbersOccurrences
     );
+  }
+
+  @Test
+  public void testAllCardsAreFrom1To12Excluding8And9() {
+    var presentCardsNumbers = players.stream()
+        .map(Player::cards)
+        .flatMap(Set::stream)
+        .map(Card::getNumber)
+        .distinct()
+        .sorted()
+        .toList();
+    Assertions.assertEquals(
+        List.of(1, 2, 3, 4, 5, 6, 7, 10, 11, 12),
+        presentCardsNumbers);
   }
 }
