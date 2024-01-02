@@ -8,7 +8,7 @@ import players.Player;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.*;
 import java.util.stream.IntStream;
 
 public class CardsServiceTest {
@@ -65,11 +65,11 @@ public class CardsServiceTest {
   @Test
   public void testEveryTeamHasExactly20Cards() {
     var teamsCardsCount = players.stream()
-        .collect(Collectors.groupingBy(
+        .collect(groupingBy(
             Player::team,
-            Collectors.mapping(
+            mapping(
                 player -> player.cards().size(),
-                Collectors.summingInt(i -> i))))
+                summingInt(i -> i))))
         .values()
         .stream()
         .toList();
@@ -81,9 +81,9 @@ public class CardsServiceTest {
     var cardTypesCardCount = players.stream()
         .map(Player::cards)
         .flatMap(Set::stream)
-        .collect(Collectors.groupingBy(
+        .collect(groupingBy(
             Card::getCardType,
-            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)))
+            collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
     Assertions.assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
@@ -94,9 +94,9 @@ public class CardsServiceTest {
     var cardsNumbersOccurrences = players.stream()
         .map(Player::cards)
         .flatMap(Set::stream)
-        .collect(Collectors.groupingBy(
+        .collect(groupingBy(
             Card::getNumber,
-            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)))
+            collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
     Assertions.assertEquals(
