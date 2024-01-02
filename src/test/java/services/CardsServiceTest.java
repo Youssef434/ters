@@ -24,6 +24,7 @@ public class CardsServiceTest {
         .map(Player::cards)
         .mapToInt(Set::size)
         .sum();
+
     assertEquals(40, overallNumberOfCards);
   }
 
@@ -40,6 +41,7 @@ public class CardsServiceTest {
         .map(Card::getCardType)
         .distinct()
         .count();
+
     assertEquals(4, overallCardTypesCount);
   }
 
@@ -50,6 +52,7 @@ public class CardsServiceTest {
         .map(Set::size)
         .mapToInt(c -> c)
         .toArray();
+
     assertArrayEquals(new int[] {10, 10, 10, 10}, playersNumberOfCards);
   }
 
@@ -59,6 +62,7 @@ public class CardsServiceTest {
         .map(Player::team)
         .distinct()
         .count();
+
     assertEquals(2, teamsCount);
   }
 
@@ -73,6 +77,7 @@ public class CardsServiceTest {
         .values()
         .stream()
         .toList();
+
     assertIterableEquals(List.of(20, 20), teamsCardsCount);
   }
 
@@ -86,6 +91,7 @@ public class CardsServiceTest {
             collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
+
     assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
   }
 
@@ -99,6 +105,7 @@ public class CardsServiceTest {
             collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
+
     assertEquals(
         IntStream.rangeClosed(1, 10).map(unused -> 4).boxed().toList(),
         cardsNumbersOccurrences
@@ -114,6 +121,7 @@ public class CardsServiceTest {
         .distinct()
         .sorted()
         .toList();
+
     assertEquals(
         List.of(1, 2, 3, 4, 5, 6, 7, 10, 11, 12),
         presentCardsNumbers);
