@@ -31,9 +31,7 @@ public interface CardsService {
 
     public List<Player> distribute(String[] name) {
       List<Player> distribution = distributionAttempt(name);
-      if (gameEligibilityService.isEligible(distribution))
-        return distribution;
-      return distribute(name);
+      return gameEligibilityService.isEligible(distribution) ? distribution : distribute(name);
     }
 
     public List<Player> distributionAttempt(String[] names) {
