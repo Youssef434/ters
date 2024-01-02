@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import static java.util.stream.Collectors.*;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class CardsServiceTest {
   private static List<Player> players;
@@ -117,5 +118,25 @@ public class CardsServiceTest {
     Assertions.assertEquals(
         List.of(1, 2, 3, 4, 5, 6, 7, 10, 11, 12),
         presentCardsNumbers);
+  }
+
+  @Test
+  public void testPlayerCannotHaveMoreThan6CardsOfTheSameType() {
+    CardsService cardService = CardsService.create();
+    String[] playersNames = new String[] {"P1", "P2", "P3", "P4"};
+    var isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
+        .parallel()
+        .mapToObj(unused -> playersNames)
+        .map(cardService::distribute)
+        .map(List::stream)
+        .flatMap(players -> players
+            .map(Player::cards)
+            .map(Set::stream)
+            .flatMap(s -> s
+                .collect(groupingBy(Card::getCardType, collectingAndThen(counting(), Long::intValue)))
+                .values()
+                .stream()))
+        .noneMatch(c -> c > 6);
+    Assertions.assertTrue(isValid);
   }
 }
