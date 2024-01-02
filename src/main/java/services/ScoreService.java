@@ -31,6 +31,7 @@ public interface ScoreService {
           10, .34);
     }
 
+    @Override
     public double countScore(Collection<Card> cards) {
       return cards
           .stream()
@@ -40,6 +41,7 @@ public interface ScoreService {
           .sum();
     }
 
+    @Override
     public Map<Team, Double> getCycleScore(Cycle.CycleResult cycleResult) {
       var winingTeam = cycleResult.getPlayer().team();
       var nonWiningTeam = winingTeam == Team.A ? Team.B : Team.A;

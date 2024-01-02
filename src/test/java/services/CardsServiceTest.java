@@ -4,9 +4,11 @@ import cards.Card;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import players.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import static java.util.stream.Collectors.*;
 import java.util.stream.IntStream;
@@ -141,21 +143,19 @@ public class CardsServiceTest {
 
   @Test
   public void testPlayerCannotHaveLessThan4QuartersInHisHand() {
-    CardsService cardService = CardsService.create();
+    ScoreService scoreService = ScoreService.create();
+    GameEligibilityService gameEligibilityService = GameEligibilityService.create(scoreService);
+    CardsService cardService = CardsService.create(gameEligibilityService);
     String[] playersNames = new String[] {"P1", "P2", "P3", "P4"};
-    var isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
+    boolean isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
         .parallel()
         .mapToObj(unused -> playersNames)
         .map(cardService::distribute)
         .map(List::stream)
         .flatMap(players -> players
             .map(Player::cards)
-            .map(Set::stream)
-            .flatMap(s -> s
-                .collect(groupingBy(Card::getCardType, collectingAndThen(counting(), Long::intValue)))
-                .values()
-                .stream()))
-        .noneMatch(c -> c < 1.34);
+            .map(scoreService::countScore))
+        .allMatch(c -> c >= 1.33);
     assertTrue(isValid);
   }
 }
