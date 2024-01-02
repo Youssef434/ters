@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public interface ScoreService {
+  double countScore(Collection<Card> cards);
   Map<Team, Double> getCycleScore(Cycle.CycleResult cycleResult);
   Map<Team, Integer> getRoundScore(Round.RoundResult roundResult);
   Map<Team, Integer> merge(Map<Team, Integer> firstScore, Map<Team, ? extends Number> secondScore);
@@ -30,7 +31,7 @@ public interface ScoreService {
           10, .34);
     }
 
-    private double countScore(Collection<Card> cards) {
+    public double countScore(Collection<Card> cards) {
       return cards
           .stream()
           .map(Card::getNumber)

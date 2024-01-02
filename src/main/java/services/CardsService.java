@@ -15,15 +15,28 @@ import java.util.stream.Stream;
 
 public interface CardsService {
   List<Player> distribute(String[] names);
-
+  static CardsService create(GameEligibilityService gameEligibilityService) {
+    return new CardsServiceImpl(gameEligibilityService);
+  }
   static CardsService create() {
-    return new CardsServiceImpl();
+    return create(GameEligibilityService.create());
   }
 
   final class CardsServiceImpl implements CardsService {
-    private CardsServiceImpl() {}
+    private final GameEligibilityService gameEligibilityService;
 
-    public List<Player> distribute(String[] names) {
+    private CardsServiceImpl(GameEligibilityService gameEligibilityService) {
+      this.gameEligibilityService = gameEligibilityService;
+    }
+
+    public List<Player> distribute(String[] name) {
+      List<Player> distribution = distributionAttempt(name);
+      if (gameEligibilityService.isEligible(distribution))
+        return distribution;
+      return distribute(name);
+    }
+
+    public List<Player> distributionAttempt(String[] names) {
       var cards = shuffle(generate()).toList();
       return IntStream.range(0, 4)
           .mapToObj(i -> Player.of(
