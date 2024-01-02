@@ -1,7 +1,7 @@
 package services;
 
 import cards.Card;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import players.Player;
@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 import static java.util.stream.Collectors.*;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class CardsServiceTest {
   private static List<Player> players;
@@ -25,12 +24,12 @@ public class CardsServiceTest {
         .map(Player::cards)
         .mapToInt(Set::size)
         .sum();
-    Assertions.assertEquals(40, overallNumberOfCards);
+    assertEquals(40, overallNumberOfCards);
   }
 
   @Test
   public void testNumberOfPlayersEqualTo4() {
-    Assertions.assertEquals(4, players.size());
+    assertEquals(4, players.size());
   }
 
   @Test
@@ -41,7 +40,7 @@ public class CardsServiceTest {
         .map(Card::getCardType)
         .distinct()
         .count();
-    Assertions.assertEquals(4, overallCardTypesCount);
+    assertEquals(4, overallCardTypesCount);
   }
 
   @Test
@@ -51,7 +50,7 @@ public class CardsServiceTest {
         .map(Set::size)
         .mapToInt(c -> c)
         .toArray();
-    Assertions.assertArrayEquals(new int[] {10, 10, 10, 10}, playersNumberOfCards);
+    assertArrayEquals(new int[] {10, 10, 10, 10}, playersNumberOfCards);
   }
 
   @Test
@@ -60,7 +59,7 @@ public class CardsServiceTest {
         .map(Player::team)
         .distinct()
         .count();
-    Assertions.assertEquals(2, teamsCount);
+    assertEquals(2, teamsCount);
   }
 
   @Test
@@ -74,7 +73,7 @@ public class CardsServiceTest {
         .values()
         .stream()
         .toList();
-    Assertions.assertIterableEquals(List.of(20, 20), teamsCardsCount);
+    assertIterableEquals(List.of(20, 20), teamsCardsCount);
   }
 
   @Test
@@ -87,7 +86,7 @@ public class CardsServiceTest {
             collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
-    Assertions.assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
+    assertEquals(List.of(10, 10, 10, 10), cardTypesCardCount);
   }
 
   @Test
@@ -100,7 +99,7 @@ public class CardsServiceTest {
             collectingAndThen(counting(), Long::intValue)))
         .values()
         .stream().toList();
-    Assertions.assertEquals(
+    assertEquals(
         IntStream.rangeClosed(1, 10).map(unused -> 4).boxed().toList(),
         cardsNumbersOccurrences
     );
@@ -115,7 +114,7 @@ public class CardsServiceTest {
         .distinct()
         .sorted()
         .toList();
-    Assertions.assertEquals(
+    assertEquals(
         List.of(1, 2, 3, 4, 5, 6, 7, 10, 11, 12),
         presentCardsNumbers);
   }
@@ -137,6 +136,6 @@ public class CardsServiceTest {
                 .values()
                 .stream()))
         .noneMatch(c -> c > 6);
-    Assertions.assertTrue(isValid);
+    assertTrue(isValid);
   }
 }
