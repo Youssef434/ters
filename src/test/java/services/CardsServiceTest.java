@@ -4,11 +4,9 @@ import cards.Card;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import players.Player;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import static java.util.stream.Collectors.*;
 import java.util.stream.IntStream;
@@ -125,7 +123,8 @@ public class CardsServiceTest {
   public void testPlayerCannotHaveMoreThan6CardsOfTheSameType() {
     CardsService cardService = CardsService.create();
     String[] playersNames = new String[] {"P1", "P2", "P3", "P4"};
-    var isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
+
+    boolean isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
         .parallel()
         .mapToObj(unused -> playersNames)
         .map(cardService::distribute)
@@ -138,6 +137,7 @@ public class CardsServiceTest {
                 .values()
                 .stream()))
         .noneMatch(c -> c > 6);
+
     assertTrue(isValid);
   }
 
@@ -147,6 +147,7 @@ public class CardsServiceTest {
     GameEligibilityService gameEligibilityService = GameEligibilityService.create(scoreService);
     CardsService cardService = CardsService.create(gameEligibilityService);
     String[] playersNames = new String[] {"P1", "P2", "P3", "P4"};
+
     boolean isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
         .parallel()
         .mapToObj(unused -> playersNames)
@@ -156,6 +157,7 @@ public class CardsServiceTest {
             .map(Player::cards)
             .map(scoreService::countScore))
         .allMatch(c -> c >= 1.33);
+
     assertTrue(isValid);
   }
 }
