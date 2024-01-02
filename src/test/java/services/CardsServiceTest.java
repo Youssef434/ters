@@ -138,4 +138,24 @@ public class CardsServiceTest {
         .noneMatch(c -> c > 6);
     assertTrue(isValid);
   }
+
+  @Test
+  public void testPlayerCannotHaveLessThan4QuartersInHisHand() {
+    CardsService cardService = CardsService.create();
+    String[] playersNames = new String[] {"P1", "P2", "P3", "P4"};
+    var isValid = IntStream.iterate(0, i -> i < 10, i -> i + 1)
+        .parallel()
+        .mapToObj(unused -> playersNames)
+        .map(cardService::distribute)
+        .map(List::stream)
+        .flatMap(players -> players
+            .map(Player::cards)
+            .map(Set::stream)
+            .flatMap(s -> s
+                .collect(groupingBy(Card::getCardType, collectingAndThen(counting(), Long::intValue)))
+                .values()
+                .stream()))
+        .noneMatch(c -> c < 1.34);
+    assertTrue(isValid);
+  }
 }
