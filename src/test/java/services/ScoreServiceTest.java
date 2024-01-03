@@ -27,23 +27,20 @@ public class ScoreServiceTest {
     assertEquals(0d, scoreService.countScore(List.of()));
   }
 
-  @Test
-  public void testCountScoreOfWhenNoCardIsCounted() {
-    var cards = List.of(
-        Card.of(4, BASTOS),
-        Card.of(5, BASTOS),
-        Card.of(6, BASTOS),
-        Card.of(7, BASTOS));
-
-    var score = scoreService.countScore(cards);
-
-    assertEquals(0d, score);
-  }
-
   @ParameterizedTest
-  @CsvSource({"1-3-4-5,1.34", "3-2-1-12,2.02"})
-  public void testGloballyCountScore(String cardNumbers, String expectedScore) {
-    var cards = Arrays.stream(cardNumbers.split("-"))
+  @CsvSource({
+      "1-3-4-5,1.34",
+      "3-2-1-12,2.02",
+      "1-1-1-1,4",
+      "1-1-3-4,2.34",
+      "3-7-2-7,.68",
+      "4-5-6-7,0",
+      "12-7-4-5,.34",
+      "1-4-5-6,1",
+      "3-2-2-7,1.02",
+      "3-2-1-4,1.6800000000000002"})
+  public void testCountScore(String cardNumbers, String expectedScore) {
+    var cards = Arrays.stream((cardNumbers == null ? "" : cardNumbers).split("-"))
         .map(Integer::parseInt)
         .map(cardNum -> Card.of(cardNum, OROS))
         .toList();
