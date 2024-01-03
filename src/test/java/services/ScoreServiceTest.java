@@ -41,9 +41,9 @@ public class ScoreServiceTest {
   }
 
   @ParameterizedTest
-  @CsvSource({"1345,1.34"})
+  @CsvSource({"1-3-4-5,1.34", "3-2-1-12,2.02"})
   public void testGloballyCountScore(String cardNumbers, String expectedScore) {
-    var cards = Arrays.stream(cardNumbers.split(""))
+    var cards = Arrays.stream(cardNumbers.split("-"))
         .map(Integer::parseInt)
         .map(cardNum -> Card.of(cardNum, OROS))
         .toList();
