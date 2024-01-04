@@ -95,6 +95,19 @@ public class ScoreServiceTest {
 
     assertEquals(Map.of(Team.A, 2.34d, Team.B, 0d), cycleScore);
   }
+
+  @Test
+  public void testGetCycleScoreWhenResultIsInt() {
+    var cycleResult = createCycleResult(List.of(
+        Card.of(1, BASTOS),
+        Card.of(1, BASTOS),
+        Card.of(4, OROS),
+        Card.of(1, OROS)));
+    var cycleScore = scoreService.getCycleScore(cycleResult);
+
+    assertEquals(Map.of(Team.A, 3d, Team.B, 0d), cycleScore);
+  }
+
   private static Cycle.CycleResult createCycleResult(List<Card> cards) {
     var cycleResult = mock(Cycle.CycleResult.class);
     when(cycleResult.getPlayer()).thenReturn(Player.of(Team.A, "", Set.of()));
