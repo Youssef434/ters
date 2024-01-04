@@ -1,19 +1,24 @@
 package services;
 
 import cards.Card;
+import game.Cycle;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import players.Player;
 import players.Team;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static cards.CardType.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ScoreServiceTest {
   private static ScoreService scoreService;
@@ -77,5 +82,23 @@ public class ScoreServiceTest {
     var secondScore = Map.of(Team.A, 6.5, Team.B, 3.5);
 
     assertEquals(Map.of(Team.A, 9, Team.B, 4), scoreService.merge(firstScore, secondScore));
+  }
+
+  @Test
+  public void testGetCycleScoreWhenResultIsDouble() {
+    var cycleResult = createCycleResult(List.of(
+        Card.of(1, BASTOS),
+        Card.of(3, BASTOS),
+        Card.of(4, OROS),
+        Card.of(1, OROS)));
+    var cycleScore = scoreService.getCycleScore(cycleResult);
+
+    assertEquals(Map.of(Team.A, 2.34d, Team.B, 0d), cycleScore);
+  }
+  private static Cycle.CycleResult createCycleResult(List<Card> cards) {
+    var cycleResult = mock(Cycle.CycleResult.class);
+    when(cycleResult.getPlayer()).thenReturn(Player.of(Team.A, "", Set.of()));
+    when(cycleResult.getCards()).thenReturn(cards);
+    return cycleResult;
   }
 }
