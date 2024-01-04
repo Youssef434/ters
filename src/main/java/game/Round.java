@@ -44,8 +44,8 @@ public final class Round implements Playable {
     System.out.println("Cycle " + (currentCycle + 1));
     var cycle = Cycle.from(scanner, gameRulesService, scoreService);
     var cycleResult = cycle.start(beginIndex, players);
-    return start(currentCycle + 1, players, players.indexOf(cycleResult.getPlayer()),
-        Stream.concat(cycleResults, Stream.of(cycleResult)), cycleResult.getPlayer().team());
+    return start(currentCycle + 1, players, players.indexOf(cycleResult.getWinningPlayer()),
+        Stream.concat(cycleResults, Stream.of(cycleResult)), cycleResult.getWinningPlayer().team());
   }
 
   public static Round from(GameRulesService gameRulesService, ScoreService scoreService, Scanner scanner) {

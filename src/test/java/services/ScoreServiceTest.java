@@ -122,7 +122,7 @@ public class ScoreServiceTest {
 
   private static Cycle.CycleResult createCycleResult(List<Card> cards) {
     var cycleResult = mock(Cycle.CycleResult.class);
-    when(cycleResult.getPlayer()).thenReturn(Player.of(Team.A, "", Set.of()));
+    when(cycleResult.getWinningPlayer()).thenReturn(Player.of(Team.A, "", Set.of()));
     when(cycleResult.getCards()).thenReturn(cards);
     return cycleResult;
   }

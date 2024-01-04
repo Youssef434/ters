@@ -25,12 +25,12 @@ public final class Cycle implements Playable {
     }
   }
   public static final class CycleResult implements Result {
-    private final Player player;
+    private final Player winningPlayer;
     private final List<Card> cards;
     private final ScoreService scoreService;
 
-    private CycleResult(Player player, List<Card> cards, ScoreService scoreService) {
-      this.player = player;
+    private CycleResult(Player winningPlayer, List<Card> cards, ScoreService scoreService) {
+      this.winningPlayer = winningPlayer;
       this.cards = cards;
       this.scoreService = scoreService;
     }
@@ -42,8 +42,8 @@ public final class Cycle implements Playable {
           .toList(), scoreService);
     }
 
-    public Player getPlayer() {
-      return player;
+    public Player getWinningPlayer() {
+      return winningPlayer;
     }
 
     public List<Card> getCards() {
@@ -53,7 +53,7 @@ public final class Cycle implements Playable {
     @Override
     public String toString() {
       return new StringJoiner(", ", CycleResult.class.getSimpleName() + "[", "]")
-          .add("player=" + player)
+          .add("player=" + winningPlayer)
           .add("cards=" + cards)
           .toString();
     }

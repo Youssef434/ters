@@ -43,7 +43,7 @@ public interface ScoreService {
 
     @Override
     public Map<Team, Double> getCycleScore(Cycle.CycleResult cycleResult) {
-      var winingTeam = cycleResult.getPlayer().team();
+      var winingTeam = cycleResult.getWinningPlayer().team();
       var nonWiningTeam = winingTeam == Team.A ? Team.B : Team.A;
       return Map.of(
           winingTeam, countScore(cycleResult.getCards()),
