@@ -100,12 +100,24 @@ public class ScoreServiceTest {
   public void testGetCycleScoreWhenResultIsInt() {
     var cycleResult = createCycleResult(List.of(
         Card.of(1, BASTOS),
-        Card.of(1, BASTOS),
+        Card.of(7, BASTOS),
         Card.of(4, OROS),
         Card.of(1, OROS)));
     var cycleScore = scoreService.getCycleScore(cycleResult);
 
-    assertEquals(Map.of(Team.A, 3d, Team.B, 0d), cycleScore);
+    assertEquals(Map.of(Team.A, 2d, Team.B, 0d), cycleScore);
+  }
+
+  @Test
+  public void testGetCycleScoreWhenResultIsZero() {
+    var cycleResult = createCycleResult(List.of(
+        Card.of(7, BASTOS),
+        Card.of(5, BASTOS),
+        Card.of(6, OROS),
+        Card.of(4, OROS)));
+    var cycleScore = scoreService.getCycleScore(cycleResult);
+
+    assertEquals(Map.of(Team.A, 0d, Team.B, 0d), cycleScore);
   }
 
   private static Cycle.CycleResult createCycleResult(List<Card> cards) {
