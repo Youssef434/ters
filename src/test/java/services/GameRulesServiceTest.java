@@ -16,6 +16,7 @@ public class GameRulesServiceTest {
   public static void init() {
     gameRulesService = GameRulesService.create();
   }
+
   @Test
   public void testPlayerWithEmptyHand() {
     var player = Player.of(Team.A, "", Set.of());
