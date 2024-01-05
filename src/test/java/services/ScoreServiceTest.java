@@ -136,8 +136,7 @@ public class ScoreServiceTest {
             createCycleResult((List.of(Card.of(1, BASTOS), Card.of(1, BASTOS), Card.of(1, OROS), Card.of(1, OROS)))),
             createCycleResult((List.of(Card.of(10, BASTOS), Card.of(10, BASTOS), Card.of(10, OROS), Card.of(10, OROS)))),
             createCycleResult((List.of(Card.of(11, BASTOS), Card.of(11, BASTOS), Card.of(11, OROS), Card.of(11, OROS)))),
-            createCycleResult((List.of(Card.of(12, BASTOS), Card.of(12, BASTOS), Card.of(12, OROS), Card.of(12, OROS))))),
-        Team.A
+            createCycleResult((List.of(Card.of(12, BASTOS), Card.of(12, BASTOS), Card.of(12, OROS), Card.of(12, OROS)))))
     );
 
     var roundScore = scoreService.getRoundScore(roundResult);
@@ -151,10 +150,10 @@ public class ScoreServiceTest {
     when(cycleResult.getCards()).thenReturn(cards);
     return cycleResult;
   }
-  private static Round.RoundResult createRoundResult(List<Cycle.CycleResult> cycleResults, Team lastWinner) {
+  private static Round.RoundResult createRoundResult(List<Cycle.CycleResult> cycleResults) {
     var roundResult = mock(Round.RoundResult.class);
     when(roundResult.cycleResults()).thenReturn(cycleResults);
-    when(roundResult.lastCycleWinner()).thenReturn(lastWinner);
+    when(roundResult.lastCycleWinner()).thenReturn(Team.A);
     return roundResult;
   }
 }
