@@ -35,6 +35,7 @@ public interface GameEligibilityService {
           .map(scoreService::countScore)
           .allMatch(score -> score > 1.33);
     }
+
     private boolean isCardTypesLegal(List<Player> players) {
       return players.stream()
           .parallel()

@@ -1,7 +1,6 @@
 package services;
 
 import cards.Card;
-import cards.CardType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import players.Player;

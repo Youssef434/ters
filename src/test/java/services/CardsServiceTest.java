@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 public class CardsServiceTest {
   private static List<Player> players;
+
   @BeforeAll
   public static void init() {
     players = CardsService.create().distribute(new String[] {"P1", "P2", "P3", "P4"});

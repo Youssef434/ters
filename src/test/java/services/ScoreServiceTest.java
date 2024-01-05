@@ -150,6 +150,7 @@ public class ScoreServiceTest {
     when(cycleResult.getCards()).thenReturn(cards);
     return cycleResult;
   }
+
   private static Round.RoundResult createRoundResult(List<Cycle.CycleResult> cycleResults) {
     var roundResult = mock(Round.RoundResult.class);
     when(roundResult.cycleResults()).thenReturn(cycleResults);
