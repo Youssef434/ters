@@ -2,6 +2,7 @@ package services;
 
 import cards.Card;
 import game.Cycle;
+import game.Round;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -125,5 +126,11 @@ public class ScoreServiceTest {
     when(cycleResult.getWinningPlayer()).thenReturn(Player.of(Team.A, "", Set.of()));
     when(cycleResult.getCards()).thenReturn(cards);
     return cycleResult;
+  }
+  private static Round.RoundResult createRoundResult(List<Cycle.CycleResult> cycleResults, Team lastWinner) {
+    var roundResult = mock(Round.RoundResult.class);
+    when(roundResult.cycleResults()).thenReturn(cycleResults);
+    when(roundResult.lastCycleWinner()).thenReturn(lastWinner);
+    return roundResult;
   }
 }
