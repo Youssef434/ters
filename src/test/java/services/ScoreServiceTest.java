@@ -92,6 +92,7 @@ public class ScoreServiceTest {
         Card.of(3, BASTOS),
         Card.of(4, OROS),
         Card.of(1, OROS)));
+
     var cycleScore = scoreService.getCycleScore(cycleResult);
 
     assertEquals(Map.of(Team.A, 2.34d, Team.B, 0d), cycleScore);
@@ -104,6 +105,7 @@ public class ScoreServiceTest {
         Card.of(7, BASTOS),
         Card.of(4, OROS),
         Card.of(1, OROS)));
+
     var cycleScore = scoreService.getCycleScore(cycleResult);
 
     assertEquals(Map.of(Team.A, 2d, Team.B, 0d), cycleScore);
@@ -116,9 +118,31 @@ public class ScoreServiceTest {
         Card.of(5, BASTOS),
         Card.of(6, OROS),
         Card.of(4, OROS)));
+
     var cycleScore = scoreService.getCycleScore(cycleResult);
 
     assertEquals(Map.of(Team.A, 0d, Team.B, 0d), cycleScore);
+  }
+
+  @Test
+  public void testGetRoundResult() {
+    var roundResult = createRoundResult(
+        List.of(createCycleResult((List.of(Card.of(7, BASTOS), Card.of(7, BASTOS), Card.of(7, OROS), Card.of(7, OROS)))),
+            createCycleResult((List.of(Card.of(6, BASTOS), Card.of(6, BASTOS), Card.of(6, OROS), Card.of(6, OROS)))),
+            createCycleResult((List.of(Card.of(5, BASTOS), Card.of(5, BASTOS), Card.of(5, OROS), Card.of(5, OROS)))),
+            createCycleResult((List.of(Card.of(4, BASTOS), Card.of(4, BASTOS), Card.of(4, OROS), Card.of(4, OROS)))),
+            createCycleResult((List.of(Card.of(3, BASTOS), Card.of(3, BASTOS), Card.of(3, OROS), Card.of(3, OROS)))),
+            createCycleResult((List.of(Card.of(2, BASTOS), Card.of(2, BASTOS), Card.of(2, OROS), Card.of(2, OROS)))),
+            createCycleResult((List.of(Card.of(1, BASTOS), Card.of(1, BASTOS), Card.of(1, OROS), Card.of(1, OROS)))),
+            createCycleResult((List.of(Card.of(10, BASTOS), Card.of(10, BASTOS), Card.of(10, OROS), Card.of(10, OROS)))),
+            createCycleResult((List.of(Card.of(11, BASTOS), Card.of(11, BASTOS), Card.of(11, OROS), Card.of(11, OROS)))),
+            createCycleResult((List.of(Card.of(12, BASTOS), Card.of(12, BASTOS), Card.of(12, OROS), Card.of(12, OROS))))),
+        Team.A
+    );
+
+    var roundScore = scoreService.getRoundScore(roundResult);
+
+    assertEquals(Map.of(Team.A, 11, Team.B, 0), roundScore);
   }
 
   private static Cycle.CycleResult createCycleResult(List<Card> cards) {
