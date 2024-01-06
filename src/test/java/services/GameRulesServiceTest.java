@@ -8,8 +8,7 @@ import players.Team;
 
 import java.util.Set;
 
-import static cards.CardType.BASTOS;
-import static cards.CardType.OROS;
+import static cards.CardType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameRulesServiceTest {
@@ -45,6 +44,16 @@ public class GameRulesServiceTest {
     var player = Player.of(Team.A, "", playerCards);
 
     var playableCards = gameRulesService.playableCards(player, null);
+
+    assertEquals(playerCards, playableCards);
+  }
+
+  @Test
+  public void testPlayerHasNoCardOfDominantType() {
+    var playerCards = Set.of(Card.of(10, BASTOS), Card.of(11, BASTOS), Card.of(4, OROS));
+    var player = Player.of(Team.A, "", playerCards);
+
+    var playableCards = gameRulesService.playableCards(player, COPAS);
 
     assertEquals(playerCards, playableCards);
   }
