@@ -57,4 +57,14 @@ public class GameRulesServiceTest {
 
     assertEquals(playerCards, playableCards);
   }
+
+  @Test
+  public void testPlayerHavingSomeCardsOfTheDominantType() {
+    var playerCards = Set.of(Card.of(10, BASTOS), Card.of(11, BASTOS), Card.of(4, OROS));
+    var player = Player.of(Team.A, "", playerCards);
+
+    var playableCards = gameRulesService.playableCards(player, BASTOS);
+
+    assertEquals(Set.of(Card.of(10, BASTOS), Card.of(11, BASTOS)), playableCards);
+  }
 }
