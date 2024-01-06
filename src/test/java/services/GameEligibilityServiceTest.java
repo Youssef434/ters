@@ -48,7 +48,7 @@ public class GameEligibilityServiceTest {
         Card.of(12, BASTOS),
         Card.of(11, BASTOS),
         Card.of(10, BASTOS),
-        Card.of(4, BASTOS),
+        Card.of(7, COPAS),
         Card.of(4, OROS),
         Card.of(4, COPAS),
         Card.of(4, ESPADAS))));
@@ -56,5 +56,24 @@ public class GameEligibilityServiceTest {
     boolean isEligible = gameEligibilityService.isEligible(players);
 
     assertFalse(isEligible);
+  }
+
+  @Test
+  public void testGameIsEligible() {
+    var players = List.of(Player.of(Team.A, "", Set.of(
+        Card.of(1, BASTOS),
+        Card.of(2, BASTOS),
+        Card.of(3, BASTOS),
+        Card.of(12, BASTOS),
+        Card.of(11, BASTOS),
+        Card.of(10, BASTOS),
+        Card.of(2, COPAS),
+        Card.of(3, OROS),
+        Card.of(1, COPAS),
+        Card.of(1, ESPADAS))));
+
+    boolean isEligible = gameEligibilityService.isEligible(players);
+
+    assertTrue(isEligible);
   }
 }

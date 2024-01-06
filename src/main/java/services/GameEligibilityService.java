@@ -29,6 +29,7 @@ public interface GameEligibilityService {
     public boolean isEligible(List<Player> players) {
       return isCardNumbersLegal(players) && isCardTypesLegal(players);
     }
+
     private boolean isCardNumbersLegal(List<Player> players) {
       return players.stream()
           .map(Player::cards)
