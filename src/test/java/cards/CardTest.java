@@ -11,6 +11,11 @@ import static cards.CardType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardTest {
+  @Test
+  public void testCardIsInvalid() {
+    assertThrows(IllegalArgumentException.class, () -> Card.of(100, BASTOS));
+  }
+
   @RepeatedTest(10)
   public void testHandsAreSortedByType() {
     List<CardType> cardTypes = Arrays.stream(values()).collect(Collectors.toList());
